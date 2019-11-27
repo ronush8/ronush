@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/png" href="http://tiffinschool.co.uk/_images/menuandbackgrounds/logos/Logo.png">
+        <title>framebrowser</title>
+        <style>
+            :root
+            {
+                --bg: white;
+                --fg: black;
+                --btn-bg: white;
+                --btn-fg: black;
+                --radius: 4px;
+                --font: sans-serif;
+            }
+            
+            *
+            {
+                box-sizing: border-box;
+                font-family: var(--font);
+            }
+            
+            html, body
+            {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+            }
+            
+            body
+            {
+                background-color: var(--bg);
+                padding: 0.5em;
+                color: var(--fg);
+            }
+            
+            button
+            {
+                background-color: var(--btn-bg);
+                border: 1px solid var(--btn-fg);
+                border-radius: var(--radius);
+                padding: 3px;
+                margin: 2px 0;
+                color: var(--btn-fg);
+                cursor: pointer;
+            }
+
+            .iconbutton
+            {
+                font-size: 2em;
+                line-height: 1em;
+                width: 1.5em;
+                height: 1.5em;
+                flex: 0 0 1.5em;
+                margin: 2px;
+            }
+            
+            header
+            {
+                display: flex;
+                align-items: middle;
+            }
+            
+            header > input
+            {
+                min-width: 0;
+                font-size: 2em;
+                flex: 1 1 2px;
+                margin: 2px;
+            }
+
+            iframe
+            {
+                width: 100%;
+                border: none;
+                height: 100%;
+                background-color: inherit;
+            }
+            
+            #settings
+            {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: calc(100% - 40px);
+                height: calc(100% - 40px);
+                margin: 0;
+                box-shadow: 5px 5px 10px #00000088;
+                padding: 1em 1.5em;
+                background-color: inherit;
+                display: none;
+                overflow: scroll;
+            }
+            
+            #settings > #closeSettings
+            {
+                position: fixed;
+                top: 1em;
+                right: 1em;
+            }
+            
+            footer
+            {
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <button type="button" class="iconbutton" onclick="frame.src = frame.src" title="reload">&#x2B6E;</button>
+            <button type="button" class="iconbutton" onclick="frame.requestFullscreen()" title="fullscreen">&#x26F6;</button>
+            <input type="text" id="bar" title="search or enter URL" placeholder="search or enter URL">
+            <button type="button" class="iconbutton" onclick="escape()" title="quick escape: alt+q">!</button>
+            <button type="button" class="iconbutton" onclick="settings.style.display = 'block'" title="settings">&#x2699;</button>
+            <button type="button" class="iconbutton" onclick="window.open('https://sites.google.com/tiffin.kingston.sch.uk/framebrowser/home', '_blank')" title="info">&#x1F6C8;</button>
+        </header>
+            
+        <nav>
+            <button type="button" class="link" data-url='about:blank'>blank</button>
+            <button type="button" class="link" data-url='crazygames.com'>crazy games (hub)</button>
+            <button type="button" class="link" data-url='https://www.y8.com/games'>y8 games (hub)</button>
+            <button type="button" class="link" data-url='andkon.com/arcade'>andkon arcade (hub)</button>
+            <button type="button" class="link" data-url='classic.minecraft.net'>minecraft</button>
+            <button type="button" class="link" data-url='http://letsplay.ouigo.com'>ouigo</button>
+            <button type="button" class="link" data-url='https://justbuild.xyz/play'>JustBuild.lol</button>
+            <button type="button" class="link" data-url='https://brycec.neocities.org/youtube.html'>unblocked youtube</button>
+            <button type="button" class="link" data-url='drawasaurus.org'>drawasaurus</button>
+            <button type="button" class="link" data-url='crocomania.network'>VPN</button>
+        </nav>
+        
+        <iframe id="frame" allowfullscreen="true" src="about:blank"></iframe>
+        
+        <footer>framebrowser v4.4</footer>
+        
+        <aside id="settings">
+            <button type="button" class="iconbutton" onclick="settings.style.display = 'none'" id="closeSettings">&#x1F5D9;</button>
+            
+            <h2>settings</h2>
+            
+            <h3>appearance</h3>
+            <p>background color: <input type="color" id="bgcolor" value="#FFFFFF" onchange="document.documentElement.style.setProperty('--bg', this.value)"></p>
+            <p>foreground color: <input type="color" id="fgcolor" value="#000000" onchange="document.documentElement.style.setProperty('--fg', this.value)"></p>            
+            <p>button background color: <input type="color" id="btnbgcolor" value="#FFFFFF" onchange="document.documentElement.style.setProperty('--btn-bg', this.value)"></p>
+            <p>button foreground color: <input type="color" id="btnfgcolor" value="#000000" onchange="document.documentElement.style.setProperty('--btn-fg', this.value)"></p>
+            <button type="button" onclick="changeInput({fgcolor:'#000000',bgcolor:'#FFFFFF',btnfgcolor:'#000000',btnbgcolor:'#FFFFFF'});">default</button>
+            <button type="button" onclick="changeInput({fgcolor:'#222222',bgcolor:'#EEEEEE',btnfgcolor:'#222222',btnbgcolor:'#EEEEEE'});">low contrast</button>
+            <button type="button" onclick="changeInput({fgcolor:'#FFFFFF',bgcolor:'#000000',btnfgcolor:'#FFFFFF',btnbgcolor:'#000000'});">inverted</button>
+            <button type="button" onclick="changeInput({fgcolor:'#FFFFFF',bgcolor:'#000000',btnfgcolor:'#000000',btnbgcolor:'#FFFFFF'});">dark</button>
+            <button type="button" onclick="changeInput({fgcolor:'#002b36',bgcolor:'#fdf6e3',btnfgcolor:'#fdf6e3',btnbgcolor:'#002b36'});">solarized light</button>
+            <button type="button" onclick="changeInput({fgcolor:'#fdf6e3',bgcolor:'#002b36',btnfgcolor:'#002b36',btnbgcolor:'#fdf6e3'});">solarized dark</button>
+            <button type="button" onclick="changeInput({fgcolor:'#ffa900',bgcolor:'#000000',btnfgcolor:'#000000',btnbgcolor:'#ffa900'});">epic gamer</button>
+            <button type="button" onclick="changeInput({fgcolor:'#000000',bgcolor:'#EAEAEA',btnfgcolor:'#EAEAEA',btnbgcolor:'#129CCA'});">goguardian</button>
+
+            <p>button radius: <input type="range" id="radius" min="0" max="20" value="4" step="1" onchange="document.documentElement.style.setProperty('--radius', this.value + 'px');radiusValue.innerHTML = this.value + 'px'"> <span id="radiusValue">4px</span></p>
+            <p>font:
+                <select onchange="document.documentElement.style.setProperty('--font', this.value);">
+                    <option value="sans-serif">sans-serif</option>
+                    <option value="serif">serif</option>
+                    <option value="calibri">calibri</option>
+                    <option value="'Comic Sans MS'">comic sans</option>
+                    <option value="courier">courier</option>
+                </select>
+            </p>
+            
+            <h3>title</h3>
+            <p>icon: <input type="text" id="favicon" value="http://tiffinschool.co.uk/_images/menuandbackgrounds/logos/Logo.png" onchange="document.getElementsByTagName('link')[0].href = this.value"></p>
+            <p>title: <input type="text" id="thetitle" value="framebrowser" onchange="document.title = this.value"></p>
+            <button type="button" onclick="changeInput({favicon:'http://tiffinschool.co.uk/_images/menuandbackgrounds/logos/Logo.png',thetitle: 'framebrowser'})">default</button>
+            <button type="button" onclick="changeInput({favicon:'http://icons.iconarchive.com/icons/marcus-roberto/google-play/256/Google-Drive-icon.png',thetitle:'My Drive - Google Drive'})">google drive</button>
+            <p><small><strong>brotip:</strong> use Alt+T to toggle between default and Google Drive</small></p>
+            
+            <h3>escape page</h3>
+            <input type="text" id="escapeURL" value="https://classroom.google.com/">
+            
+            <h3>search engine</h3>
+            <p>enter the search url with %s in place of the search string: <input type="text" id="search" value="bing.com/search?q=%s"></p>
+            <button type="button" onclick="changeInput({search:'bing.com/search?q=%s'})">bing</button>
+            <p><small>note that google does not work as it forbids to have itself embedded in a site.</small></p>
+        </aside>
+        
+        <script>
+            // easy aliases for frequently used elements
+            const frame       = document.getElementById("frame");
+            const bar         = document.getElementById("bar");
+            const fgcolor     = document.getElementById("fgcolor");
+            const bgcolor     = document.getElementById("bgcolor");
+            const btnfgcolor  = document.getElementById("btnfgcolor");
+            const btnbgcolor  = document.getElementById("btnbgcolor");
+            const escapeURL   = document.getElementById("escapeURL");
+            const thetitle    = document.getElementById("thetitle");
+            const favicon     = document.getElementById("favicon");
+            const settings    = document.getElementById("settings");
+            const radiusValue = document.getElementById("radiusValue");
+            const search      = document.getElementById("search");
+            
+            // this function takes in an object in the format {element: newValue, element: newValue}, and for each element.value is set to newValue, and the onchange event handler is called. Basically, it simulates the user entering in a value by calling the same event handlers.
+            function
+            changeInput(obj)
+            {
+                for (const elem in obj) {
+                    this[elem].value = obj[elem];
+                    this[elem].dispatchEvent(new Event("change"));
+                }
+            }
+
+            const URLRegex = /\.|^(https?|about):/;
+            const hasProtocolRegex = /^(https?|about):/;
+
+            bar.addEventListener("change", function (e) {
+                var url = bar.value;
+                
+                if (!URLRegex.test(url)) {
+                    url = search.value.replace(/%s/g, url);
+                }
+                
+                if (!hasProtocolRegex.test(url)) {
+                    url = "https://" + url;
+                }
+                
+                frame.src = url;
+                frame.requestFullscreen();
+            });
+            
+            // quick escape to another site
+            function
+            escape()
+            {
+                document.open();
+                location.href = escapeURL.value;
+            }
+            
+            // Alt+Q does a quick escape
+            // Alt+T toggles custom title and icon
+            addEventListener("keydown", function (e) {
+                if (e.key === "q" && e.getModifierState("Alt")) escape();
+                if (e.key === "t" && e.getModifierState("Alt")) {
+                    if (document.title !== "framebrowser") {
+                        changeInput({
+                            favicon: "http://tiffinschool.co.uk/_images/menuandbackgrounds/logos/Logo.png",
+                            thetitle: "framebrowser"
+                        });
+                    } else {
+                        changeInput({
+                            favicon: "http://icons.iconarchive.com/icons/marcus-roberto/google-play/256/Google-Drive-icon.png",
+                            thetitle: "My Drive - Google Drive"
+                        });
+                    }
+                }
+            });
+            
+            // for every link in the bookmarks, change the onclick and title
+            const links = Array.from(document.getElementsByClassName("link"));
+            for (const link of links) {
+                link.addEventListener("click", function (e) {
+                    changeInput({bar: this.dataset.url});
+                });
+                link.title = link.dataset.url;
+            }
+        </script>
+    </body>
+</html>
